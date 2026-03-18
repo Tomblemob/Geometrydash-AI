@@ -1,0 +1,730 @@
+body { 
+    margin: 0; 
+    background: #000; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    height: 100vh; 
+    font-family: 'Segoe UI', 'Arial', sans-serif; 
+    overflow: hidden; 
+    color: white; 
+}
+
+#gameContainer { 
+    position: relative; 
+    width: 1000px; 
+    height: 500px; 
+    box-shadow: 0 0 120px rgba(0,255,255,0.3), 0 0 60px rgba(0,100,255,0.2); 
+    border: 2px solid #00ffff; 
+    background: #000;
+}
+
+canvas { 
+    background: #000; 
+    width: 100%; 
+    height: 100%; 
+    display: block; 
+    cursor: pointer;
+}
+
+/* ========== MENU STYLES ========== */
+.menu { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    background: rgba(5, 5, 15, 0.98); 
+    padding: 30px; 
+    border-radius: 15px; 
+    border: 3px solid #00ffff; 
+    text-align: center; 
+    min-width: 500px; 
+    z-index: 100; 
+    box-shadow: 
+        0 0 50px rgba(0,255,255,0.4),
+        inset 0 0 30px rgba(0,255,255,0.1); 
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.game-title { 
+    margin: 0 0 5px 0; 
+    color: #00ffff; 
+    letter-spacing: 4px; 
+    font-size: 32px;
+    text-shadow: 
+        0 0 10px #00ffff,
+        0 0 20px #00ffff,
+        0 0 30px #0088ff;
+    font-weight: bold;
+}
+
+.subtitle {
+    color: #0088ff;
+    font-size: 12px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.victory-title {
+    color: #00ff00;
+    text-shadow: 0 0 20px #00ff00;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.menu h1 { 
+    margin: 0 0 15px 0; 
+    color: #00ffff; 
+    letter-spacing: 2px; 
+    text-shadow: 0 0 10px #00ffff;
+}
+
+.menu h2 {
+    color: #00ffff;
+    margin-top: 0;
+}
+
+.menu-row {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.menu-flex { 
+    display: flex; 
+    gap: 20px; 
+    justify-content: center; 
+    margin: 20px 0; 
+}
+
+.menu-section { 
+    background: rgba(255,255,255,0.03); 
+    padding: 15px; 
+    border-radius: 8px; 
+    flex: 1; 
+    border: 1px solid rgba(0,255,255,0.2);
+}
+
+.menu-section h3 { 
+    font-size: 11px; 
+    margin: 0 0 10px 0; 
+    color: #00ffff; 
+    text-transform: uppercase; 
+    letter-spacing: 1px;
+}
+
+/* ========== GRID SELECTORS ========== */
+.grid-selector { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 8px; 
+    margin-top: 10px; 
+    max-height: 100px; 
+    overflow-y: auto; 
+}
+
+.color-swatch, .icon-swatch { 
+    width: 35px; 
+    height: 35px; 
+    border: 2px solid #444; 
+    cursor: pointer; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.color-swatch:hover, .icon-swatch:hover {
+    transform: scale(1.1);
+    border-color: #888;
+}
+
+.color-swatch.selected, .icon-swatch.selected { 
+    border-color: #00ffff; 
+    transform: scale(1.15); 
+    box-shadow: 
+        0 0 15px #00ffff,
+        0 0 25px rgba(0,255,255,0.3);
+}
+
+/* ========== TABS ========== */
+.icon-tabs { 
+    display: flex; 
+    border-bottom: 2px solid #333; 
+    margin-bottom: 8px; 
+    gap: 5px;
+}
+
+.tab-btn { 
+    background: none; 
+    border: none; 
+    color: #666; 
+    padding: 8px 12px; 
+    cursor: pointer; 
+    font-weight: bold; 
+    transition: all 0.2s;
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+.tab-btn:hover {
+    color: #aaa;
+}
+
+.tab-btn.active { 
+    color: #00ffff; 
+    border-bottom: 3px solid #00ffff; 
+    margin-bottom: -2px;
+}
+
+/* ========== LEVEL SELECTION ========== */
+.level-nav-container { 
+    display: flex; 
+    align-items: center; 
+    gap: 10px; 
+    margin: 15px 0; 
+}
+
+.nav-btn { 
+    background: linear-gradient(145deg, #1a1a1a, #000); 
+    border: 2px solid #444; 
+    color: #fff; 
+    padding: 12px 16px; 
+    cursor: pointer; 
+    transition: all 0.2s;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.nav-btn:hover {
+    background: linear-gradient(145deg, #222, #111);
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+.level-scroll-container { 
+    width: 300px; 
+    height: 60px; 
+    overflow: hidden; 
+    background: #0a0a0a; 
+    border: 2px solid #333; 
+    border-radius: 8px;
+}
+
+.level-scroll-wrapper { 
+    display: flex; 
+    transition: transform 0.3s ease; 
+}
+
+.level-title { 
+    width: 300px; 
+    flex-shrink: 0; 
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.level-name {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.level-meta {
+    font-size: 10px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.level-title:hover {
+    background: rgba(0,255,255,0.1);
+}
+
+.level-title.active {
+    background: rgba(0,255,255,0.2);
+    border-left: 3px solid #00ffff;
+}
+
+.level-title.active .level-name {
+    color: #00ffff;
+}
+
+.level-info {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+    font-size: 12px;
+    color: #888;
+}
+
+.level-info span {
+    background: rgba(0,255,255,0.1);
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(0,255,255,0.3);
+}
+
+.level-mgmt {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.mgmt-btn {
+    background: linear-gradient(145deg, #1a1a1a, #000);
+    border: 2px solid #444;
+    color: #fff;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.2s;
+    border-radius: 5px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.mgmt-btn:hover {
+    background: linear-gradient(145deg, #222, #111);
+    border-color: #00ffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+
+/* ========== BUTTONS ========== */
+.menu-btn { 
+    background: linear-gradient(145deg, #0066ff, #0044cc); 
+    border: none; 
+    padding: 12px 25px; 
+    color: #fff; 
+    font-weight: bold; 
+    cursor: pointer; 
+    border-radius: 6px; 
+    margin: 5px; 
+    transition: all 0.2s; 
+    box-shadow: 0 4px 12px rgba(0,100,255,0.4);
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+.menu-btn:hover { 
+    background: linear-gradient(145deg, #0088ff, #0066ff); 
+    transform: translateY(-3px); 
+    box-shadow: 0 6px 16px rgba(0,100,255,0.6);
+}
+
+.menu-btn:active {
+    transform: translateY(-1px);
+}
+
+.menu-btn.primary {
+    background: linear-gradient(145deg, #00ddff, #0088ff);
+    box-shadow: 0 4px 12px rgba(0,255,255,0.4);
+}
+
+.menu-btn.primary:hover {
+    background: linear-gradient(145deg, #00ffff, #00aaff);
+    box-shadow: 0 6px 16px rgba(0,255,255,0.6);
+}
+
+.menu-btn.editor {
+    background: linear-gradient(145deg, #ff8800, #dd6600);
+}
+
+.menu-btn.editor:hover {
+    background: linear-gradient(145deg, #ffaa00, #ff8800);
+}
+
+/* ========== STATS GRID ========== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.stat-item {
+    background: rgba(0,255,255,0.1);
+    padding: 15px;
+    border-radius: 8px;
+    border: 2px solid rgba(0,255,255,0.3);
+}
+
+.stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    font-size: 24px;
+    color: #00ffff;
+    font-weight: bold;
+}
+
+/* ========== EDITOR UI ========== */
+.editor-ui { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%; 
+    pointer-events: none; 
+}
+
+.editor-top-bar { 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    background: rgba(0,0,0,0.95); 
+    padding: 12px 15px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    pointer-events: auto; 
+    border-bottom: 3px solid #00ffff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.8);
+}
+
+.editor-controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.editor-label {
+    font-size: 12px;
+    color: #00ffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.editor-select {
+    background: #222;
+    border: 1px solid #444;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.hint {
+    font-size: 10px;
+    color: #666;
+    letter-spacing: 0.5px;
+}
+
+.level-name-input { 
+    background: #1a1a1a; 
+    border: 2px solid #444; 
+    color: #00ffff; 
+    padding: 10px 15px; 
+    width: 280px; 
+    font-size: 14px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.level-name-input:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+.editor-btn { 
+    background: #333; 
+    border: 2px solid #555; 
+    color: #fff; 
+    padding: 8px 16px; 
+    cursor: pointer; 
+    transition: all 0.2s;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.editor-btn:hover {
+    background: #444;
+    border-color: #00ffff;
+}
+
+.editor-btn.save {
+    background: linear-gradient(145deg, #00aa00, #008800);
+    border-color: #00ff00;
+}
+
+.editor-btn.save:hover {
+    background: linear-gradient(145deg, #00cc00, #00aa00);
+}
+
+.editor-btn.close {
+    background: linear-gradient(145deg, #aa0000, #880000);
+    border-color: #ff0000;
+}
+
+.editor-btn.close:hover {
+    background: linear-gradient(145deg, #cc0000, #aa0000);
+}
+
+.editor-toolbar { 
+    position: absolute; 
+    bottom: 20px; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    background: rgba(0,0,0,0.95); 
+    padding: 15px; 
+    border-radius: 12px; 
+    display: flex; 
+    gap: 15px; 
+    pointer-events: auto; 
+    border: 3px solid #00ffff; 
+    box-shadow: 
+        0 0 30px rgba(0,0,0,0.9),
+        0 0 20px rgba(0,255,255,0.3);
+}
+
+.tool-category {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    align-items: center;
+}
+
+.category-label {
+    font-size: 8px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+}
+
+.tool { 
+    width: 45px; 
+    height: 45px; 
+    background: #1a1a1a; 
+    border: 2px solid #444; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: pointer; 
+    font-size: 20px; 
+    transition: all 0.2s;
+    border-radius: 6px;
+}
+
+.tool:hover {
+    background: #252525;
+    transform: scale(1.1);
+    border-color: #666;
+}
+
+.tool.selected { 
+    border-color: #00ffff; 
+    background: #0a2a2a; 
+    box-shadow: 
+        0 0 15px rgba(0,255,255,0.5),
+        inset 0 0 10px rgba(0,255,255,0.2);
+    transform: scale(1.05);
+}
+
+/* ========== UPLOAD PANEL ========== */
+.upload-panel {
+    min-width: 450px;
+}
+
+.upload-panel input,
+.upload-panel textarea {
+    width: calc(100% - 24px);
+    background: #1a1a1a;
+    border: 2px solid #444;
+    color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+    font-family: inherit;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.upload-panel input:focus,
+.upload-panel textarea:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+.upload-panel textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+/* ========== BROWSE PANEL ========== */
+.browse-panel {
+    min-width: 600px;
+    max-width: 800px;
+}
+
+.community-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 15px 0;
+}
+
+.community-item {
+    background: rgba(255,255,255,0.03);
+    padding: 15px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border: 2px solid rgba(0,255,255,0.2);
+    text-align: left;
+    transition: all 0.2s;
+}
+
+.community-item:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(0,255,255,0.4);
+}
+
+.community-item h3 {
+    margin: 0 0 8px 0;
+    color: #00ffff;
+    font-size: 16px;
+}
+
+.community-item p {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #aaa;
+}
+
+.community-item .meta {
+    font-size: 11px;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.download-btn {
+    background: linear-gradient(145deg, #00aa00, #008800);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    transition: all 0.2s;
+    font-weight: bold;
+    font-size: 11px;
+}
+
+.download-btn:hover {
+    background: linear-gradient(145deg, #00dd00, #00aa00);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,255,0,0.3);
+}
+
+/* ========== COMMENTS PANEL ========== */
+.comments-panel {
+    min-width: 500px;
+    max-width: 600px;
+}
+
+.comments-list {
+    max-height: 320px;
+    overflow-y: auto;
+    margin: 15px 0;
+    text-align: left;
+}
+
+.comment-item {
+    background: rgba(255,255,255,0.03);
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border-left: 4px solid #00ffff;
+    transition: all 0.2s;
+}
+
+.comment-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.comment-item strong {
+    color: #00ffff;
+    font-size: 13px;
+}
+
+.comment-date {
+    font-size: 10px;
+    color: #555;
+    float: right;
+}
+
+.comment-item p {
+    margin: 8px 0 0 0;
+    font-size: 13px;
+    color: #ccc;
+}
+
+.comment-input-area {
+    display: flex;
+    gap: 10px;
+    margin: 15px 0;
+}
+
+.comment-input-area input {
+    flex: 1;
+    background: #1a1a1a;
+    border: 2px solid #444;
+    color: #fff;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.comment-input-area input:focus {
+    outline: none;
+    border-color: #00ffff;
+    box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+
+/* ========== SCROLLBAR ========== */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 5px;
+    border: 2px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+::-webkit-scrollbar-corner {
+    background: #0a0a0a;
+}

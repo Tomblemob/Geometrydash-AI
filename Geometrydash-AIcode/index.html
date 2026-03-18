@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geometry Dash Ultra</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="gameContainer">
+    <canvas id="game"></canvas>
+    
+    <div id="menu" class="menu">
+        <h1 class="game-title">GEOMETRY DASH</h1>
+        <div class="subtitle">ULTRA EDITION</div>
+        
+        <div class="menu-row">
+            <button id="playBtn" class="menu-btn primary">▶ PLAY</button>
+            <button id="editorBtn" class="menu-btn editor">✎ EDITOR</button>
+        </div>
+        
+        <div class="menu-flex">
+            <div class="menu-section">
+                <h3>🎨 COLORS</h3>
+                <div id="colorPalette" class="grid-selector"></div>
+            </div>
+            <div class="menu-section">
+                <h3>🎭 ICON KIT</h3>
+                <div class="icon-tabs">
+                    <button class="tab-btn active" data-tab="cube">CUBE</button>
+                    <button class="tab-btn" data-tab="wave">WAVE</button>
+                </div>
+                <div id="iconSelector" class="grid-selector"></div>
+            </div>
+        </div>
+
+        <div class="menu-section">
+            <h3>📋 LEVELS</h3>
+            <div class="level-nav-container">
+                <button id="levelLeft" class="nav-btn">◀</button>
+                <div class="level-scroll-container">
+                    <div id="levelList" class="level-scroll-wrapper"></div>
+                </div>
+                <button id="levelRight" class="nav-btn">▶</button>
+            </div>
+            <div class="level-info">
+                <span id="levelMode">Mode: Cube</span>
+                <span id="levelLength">Length: 0m</span>
+            </div>
+            <div class="level-mgmt">
+                <button id="newLevelBtn" class="mgmt-btn">+ NEW</button>
+                <button id="deleteLevelBtn" class="mgmt-btn">- DEL</button>
+                <button id="uploadLevelBtn" class="mgmt-btn">☁ UPLOAD</button>
+                <button id="browseLevelsBtn" class="mgmt-btn">🌐 BROWSE</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="victoryUI" class="menu" style="display: none;">
+        <h1 class="victory-title">★ LEVEL COMPLETE! ★</h1>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">Attempts</div>
+                <div id="statAttempts" class="stat-value">1</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Progress</div>
+                <div class="stat-value">100%</div>
+            </div>
+        </div>
+        <div class="menu-row">
+            <button id="replayBtn" class="menu-btn">🔄 REPLAY</button>
+            <button id="victoryHomeBtn" class="menu-btn">🏠 MENU</button>
+            <button id="commentsBtn" class="menu-btn">💬 COMMENTS</button>
+        </div>
+    </div>
+
+    <div id="pauseMenu" class="menu" style="display: none;">
+        <h1>⏸ PAUSED</h1>
+        <button id="resumeBtn" class="menu-btn primary">▶ RESUME</button>
+        <button id="menuBtn" class="menu-btn">🏠 MAIN MENU</button>
+    </div>
+
+    <div id="editorUI" class="editor-ui" style="display: none;">
+        <div class="editor-top-bar">
+            <input type="text" id="levelNameInput" class="level-name-input" placeholder="Level Name">
+            <div class="editor-controls">
+                <label class="editor-label">
+                    Start Mode:
+                    <select id="levelModeSelect" class="editor-select">
+                        <option value="cube">Cube</option>
+                        <option value="wave">Wave</option>
+                    </select>
+                </label>
+                <span class="hint">🖱 Wheel: H-Scroll | Ctrl+Wheel: V-Scroll</span>
+                <button id="saveLevelBtn" class="editor-btn save">💾 SAVE</button>
+                <button id="exitEditorBtn" class="editor-btn close">✖ EXIT</button>
+            </div>
+        </div>
+        <div class="editor-toolbar">
+            <div class="tool-category">
+                <div class="category-label">BLOCKS</div>
+                <div class="tool selected" data-type="block" title="Block">⬛</div>
+                <div class="tool" data-type="slab" title="Slab">▬</div>
+            </div>
+            <div class="tool-category">
+                <div class="category-label">HAZARDS</div>
+                <div class="tool" data-type="spike" title="Spike">🔺</div>
+            </div>
+            <div class="tool-category">
+                <div class="category-label">ORBS</div>
+                <div class="tool" data-type="orb_yellow" title="Yellow Orb">🟡</div>
+                <div class="tool" data-type="orb_pink" title="Pink Orb">🟣</div>
+                <div class="tool" data-type="orb_blue" title="Blue Orb">🔵</div>
+            </div>
+            <div class="tool-category">
+                <div class="category-label">PORTALS</div>
+                <div class="tool" data-type="portal_cube" title="Cube Portal">🟦</div>
+                <div class="tool" data-type="portal_wave" title="Wave Portal">🟨</div>
+            </div>
+            <div class="tool-category">
+                <div class="category-label">TOOLS</div>
+                <div class="tool" data-type="eraser" title="Eraser">🗑</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="commentsUI" class="menu comments-panel" style="display: none;">
+        <h2>💬 Comments</h2>
+        <div id="commentsList" class="comments-list"></div>
+        <div class="comment-input-area">
+            <input type="text" id="commentInput" placeholder="Leave a comment..." maxlength="200">
+            <button id="postCommentBtn" class="menu-btn">POST</button>
+        </div>
+        <button id="closeCommentsBtn" class="menu-btn">CLOSE</button>
+    </div>
+
+    <div id="browseLevelsUI" class="menu browse-panel" style="display: none;">
+        <h2>🌐 Community Levels</h2>
+        <div id="communityLevelsList" class="community-list"></div>
+        <button id="closeBrowseBtn" class="menu-btn">CLOSE</button>
+    </div>
+
+    <div id="uploadUI" class="menu upload-panel" style="display: none;">
+        <h2>☁ Upload Level</h2>
+        <p id="uploadLevelName" style="color: #00ffff; margin: 10px 0;"></p>
+        <input type="text" id="uploadAuthor" placeholder="Your Name" maxlength="30">
+        <textarea id="uploadDescription" placeholder="Level description..." maxlength="150"></textarea>
+        <div class="menu-row">
+            <button id="confirmUploadBtn" class="menu-btn">UPLOAD</button>
+            <button id="cancelUploadBtn" class="menu-btn">CANCEL</button>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
